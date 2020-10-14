@@ -3,6 +3,7 @@ import { CommandContribution, CommandRegistry, MenuContribution, MenuModelRegist
 import { WorkspaceService } from "@theia/workspace/lib/browser"
 import { CommonMenus, OpenerService, open } from "@theia/core/lib/browser";
 import URI from "@theia/core/lib/common/uri";
+import { FileService } from "@theia/filesystem/lib/browser/file-service";
 
 export const TestCommand = {
     id: 'Test.command',
@@ -15,21 +16,31 @@ export class TestCommandContribution implements CommandContribution {
     constructor(
         @inject(MessageService) private readonly messageService: MessageService,
         @inject(OpenerService) private readonly openerService: OpenerService,
-        @inject(WorkspaceService) private readonly workspaceService: WorkspaceService
+        @inject(WorkspaceService) private readonly workspaceService: WorkspaceService,
+        @inject(FileService) private readonly fileService: FileService
     ) { }
 
     registerCommands(registry: CommandRegistry): void {
         registry.registerCommand(TestCommand, {
-            execute: () => {
-                var queryParams = window.parent.location.toString().split("?")[1]
-                var params = new URLSearchParams(queryParams)
-                var fileToOpen = params.get("file")
-                if (fileToOpen) {
-                    var parent = this.workspaceService.workspace?.uri.toString() || "";
-                    var uri = new URI(parent + "/" + fileToOpen)
-                    this.messageService.info(window.parent.location.toString());
-                    this.messageService.info(uri?.toString() || "test");
-                    open(this.openerService, uri)
+            execute: async () => {
+                const queryParams = window.parent.location.toString().split("?")[1]
+                const cleanedUpQueryParams = queryParams.split("#")[0];
+                const params = new URLSearchParams(cleanedUpQueryParams)
+                const parentPath = params.get("parentPath")
+                const ns = params.get("ns")
+                const id = params.get("id")
+                if (parentPath) {
+                    const parent = this.workspaceService.workspace?.resource.toString() || "";
+                    const uri = new URI(parent + "/" + parentPath + "/" + ns + "/" + id)
+                    const stat = await this.fileService.resolve(uri)
+                    if(stat.children) {
+                        const files = stat.children?.filter(stat => stat.isFile)
+                        if(files.length > 0) {
+                            const firstFile = files[0].resource.toString()
+                            this.messageService.info(firstFile);
+                            open(this.openerService, new URI(firstFile))
+                        }
+                    }
                 }
             }
         });
