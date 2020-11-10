@@ -36,7 +36,7 @@ jobs:
         node-version: '12.x'
     - name: build
       run: yarn
-  docker-build:
+  docker-build-and-push:
     runs-on: ubuntu-latest
     steps:
     - name: Login to Docker Hub
@@ -47,7 +47,7 @@ jobs:
     - uses: actions/checkout@v2
       name: Checkout che-theia source code
       with:
-        repository: "https://github.com/eclipse/che-theia.git"
+        repository: "eclipse/che-theia"
     - uses: actions/setup-node@v1
       name: Configuring nodejs 10.x version
       with:
