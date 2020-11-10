@@ -16,15 +16,15 @@ on: [push, pull_request]
 
 jobs:
   # check EOF newline
-  linelint:
-    runs-on: ubuntu-latest
-    name: eof-newline
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Linelint
-        uses: fernandrone/linelint@0.0.5
-        id: linelint
+  #linelint:
+    #runs-on: ubuntu-latest
+    #name: eof-newline
+    #steps:
+      #- name: Checkout
+       # uses: actions/checkout@v2
+      #- name: Linelint
+       # uses: fernandrone/linelint@0.0.5
+        #id: linelint
   node-build:
     runs-on: ubuntu-latest
     steps:
@@ -46,6 +46,8 @@ jobs:
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
     - uses: actions/checkout@v2
       name: Checkout che-theia source code
+      with:
+        repository: "https://github.com/eclipse/che-theia.git"
     - uses: actions/setup-node@v1
       name: Configuring nodejs 10.x version
       with:
@@ -55,8 +57,8 @@ jobs:
         docker image prune -a -f
         docker pull quay.io/eclipse/che-theia-dev:next
         docker tag quay.io/eclipse/che-theia-dev:next eclipse/che-theia-dev:next
-        git clone https://github.com/eclipse/che-theia.git
-        cd che-theia
+        # add our extension repo to the extension to be included in the che-theia build
+        echo "- source: https://github.com/eclipse/che-theia.git" >> che-theia-init-sources.yml
         ./build.sh --root-yarn-opts:--ignore-scripts --dockerfile:Dockerfile.alpine
         docker tag eclipse/che-theia:next opentosca/che-theia:next
         docker push opentosca/che-theia:next
