@@ -1,15 +1,10 @@
-/**
- * Generated using theia-extension-generator
- */
-import { WineryCommandContribution, WineryMenuContribution } from './winery-contribution';
-import {
-    CommandContribution,
-    MenuContribution
-} from "@theia/core/lib/common";
+import { WineryFrontendContribution } from "./winery-contribution";
 import { ContainerModule } from "inversify";
+import { FrontendApplicationContribution } from "@theia/core/lib/browser";
 
-export default new ContainerModule(bind => {
-    // add your contribution bindings here
-    bind(CommandContribution).to(WineryCommandContribution);
-    bind(MenuContribution).to(WineryMenuContribution);
+export default new ContainerModule((bind) => {
+    bind(WineryFrontendContribution).toSelf().inSingletonScope();
+    bind(FrontendApplicationContribution).toDynamicValue((c) =>
+        c.container.get(WineryFrontendContribution)
+    );
 });
