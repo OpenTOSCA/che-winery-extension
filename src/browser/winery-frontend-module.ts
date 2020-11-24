@@ -1,7 +1,7 @@
 /**
  * Generated using theia-extension-generator
  */
-import { TestCommandContribution, TestMenuContribution } from './test-contribution';
+import { WineryCommandContribution, WineryMenuContribution } from './winery-contribution';
 import {
     CommandContribution,
     MenuContribution
@@ -10,6 +10,6 @@ import { ContainerModule } from "inversify";
 
 export default new ContainerModule(bind => {
     // add your contribution bindings here
-    bind(CommandContribution).to(TestCommandContribution);
-    bind(MenuContribution).to(TestMenuContribution);
+    bind(CommandContribution).to(WineryCommandContribution);
+    bind(MenuContribution).to(WineryMenuContribution);
 });

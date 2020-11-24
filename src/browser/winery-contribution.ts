@@ -11,7 +11,7 @@ export const TestCommand = {
 };
 
 @injectable()
-export class TestCommandContribution implements CommandContribution {
+export class WineryCommandContribution implements CommandContribution {
 
     constructor(
         @inject(MessageService) private readonly messageService: MessageService,
@@ -48,7 +48,7 @@ export class TestCommandContribution implements CommandContribution {
 }
 
 @injectable()
-export class TestMenuContribution implements MenuContribution {
+export class WineryMenuContribution implements MenuContribution {
 
     registerMenus(menus: MenuModelRegistry): void {
         menus.registerMenuAction(CommonMenus.EDIT_FIND, {

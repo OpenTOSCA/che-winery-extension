@@ -1,5 +1,5 @@
 {
-  "name": "test",
+  "name": "che-winery-extension",
   "keywords": [
     "theia-extension"
   ],
@@ -12,7 +12,6 @@
     "@theia/core": "latest",
     "@theia/workspace": "latest",
     "@theia/filesystem": "latest"
-
   },
   "devDependencies": {
     "rimraf": "latest",
@@ -26,7 +25,7 @@
   },
   "theiaExtensions": [
     {
-      "frontend": "lib/browser/test-frontend-module"
+      "frontend": "lib/browser/winery-frontend-module"
     }
   ]
 }
